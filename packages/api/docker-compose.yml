@@ -1,0 +1,6 @@
+services:
+  mongodb:
+    image: mongo
+    container_name: nest-ecommerce-mongodb
+    ports:
+      - "27017:27017"
