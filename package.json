@@ -9,7 +9,9 @@
     "dev:api": "cd packages/api && npm run start:dev",
     "dev:web": "cd packages/web && npm run dev",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
-    "build": "cd packages/api && npm run build && cd ../frontend && npm run build"
+    "build": "cd packages/api && npm run build && cd ../frontend && npm run build",
+    "install:api": "npm install -w packages/api",
+    "install:web": "npm install -w packages/web"
   },
   "repository": {
     "type": "git",
