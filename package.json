@@ -1,0 +1,25 @@
+{
+  "name": "abxmall-ecommerce",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "cd packages/api && npm run start:dev",
+    "dev:web": "cd packages/web && npm run dev",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "build": "cd packages/api && npm run build && cd ../frontend && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexdevzz/abxmall-ecommerce.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexdevzz/abxmall-ecommerce/issues"
+  },
+  "homepage": "https://github.com/alexdevzz/abxmall-ecommerce#readme",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
