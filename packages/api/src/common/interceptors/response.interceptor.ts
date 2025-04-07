@@ -1,12 +1,13 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Response as ResponseExpress } from 'express';
+import { Response as ResponseExpress, Request as RequestExpress } from 'express';
 
 interface Response<T> {
   message: string;
   timestamp: string;
   statusCode: number;
+  path: string;
   data: T;
 }
 
@@ -15,13 +16,16 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse<ResponseExpress>();
+    const request = ctx.getRequest<RequestExpress>();
+    const messageResponse = Reflect.getMetadata('responseMessage', context.getHandler()) as string;
 
     return next.handle().pipe(
       map(
         (dataResult: T): Response<T> => ({
           data: dataResult,
           statusCode: response.statusCode,
-          message: this.getMessageForStatus(response.statusCode),
+          path: request.url,
+          message: messageResponse || this.getMessageForStatus(response.statusCode),
           timestamp: new Date().toISOString(),
         }),
       ),
