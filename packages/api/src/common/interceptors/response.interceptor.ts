@@ -2,13 +2,18 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nes
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Response as ResponseExpress, Request as RequestExpress } from 'express';
+import { ResponseMetadataOptions } from '../decorators/response.decorator';
 
 interface Response<T> {
   message: string;
   timestamp: string;
   statusCode: number;
   path: string;
-  data: T;
+  data: Array<T> | T;
+  total?: number;
+  page?: number;
+  count?: number;
+  sort?: string;
 }
 
 @Injectable()
@@ -17,16 +22,20 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse<ResponseExpress>();
     const request = ctx.getRequest<RequestExpress>();
-    const messageResponse = Reflect.getMetadata('responseMessage', context.getHandler()) as string;
+    const metadata = Reflect.getMetadata('response-metadata', context.getHandler()) as ResponseMetadataOptions;
 
     return next.handle().pipe(
       map(
-        (dataResult: T): Response<T> => ({
+        (dataResult: Array<T> | T): Response<T> => ({
           data: dataResult,
           statusCode: response.statusCode,
           path: request.url,
-          message: messageResponse || this.getMessageForStatus(response.statusCode),
+          message: metadata?.message ?? this.getMessageForStatus(response.statusCode),
           timestamp: new Date().toISOString(),
+          total: metadata?.total,
+          page: metadata?.page,
+          count: metadata?.count ?? (Array.isArray(dataResult) ? dataResult.length : 1),
+          sort: metadata?.sort,
         }),
       ),
     );
