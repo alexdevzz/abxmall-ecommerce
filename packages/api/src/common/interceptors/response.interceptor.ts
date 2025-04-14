@@ -25,19 +25,27 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     const metadata = Reflect.getMetadata('response-metadata', context.getHandler()) as ResponseMetadataOptions;
 
     return next.handle().pipe(
-      map(
-        (dataResult: Array<T> | T): Response<T> => ({
+      map((dataResult: Array<T> | T): Response<T> => {
+        let message: string = '';
+
+        if (request.method === 'GET') {
+          if (!dataResult || (Array.isArray(dataResult) ? dataResult.length : 0) === 0) {
+            message = 'There are no resources available';
+          }
+        }
+
+        return {
           data: dataResult,
           statusCode: response.statusCode,
           path: request.url,
-          message: metadata?.message ?? this.getMessageForStatus(response.statusCode),
+          message: message ? message : (metadata?.message ?? this.getMessageForStatus(response.statusCode)),
           timestamp: new Date().toISOString(),
           total: metadata?.total,
           page: metadata?.page,
           count: metadata?.count ?? (Array.isArray(dataResult) ? dataResult.length : 1),
           sort: metadata?.sort,
-        }),
-      ),
+        };
+      }),
     );
   }
 
