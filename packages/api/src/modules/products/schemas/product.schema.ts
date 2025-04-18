@@ -1,4 +1,4 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose'
 
 @Schema({
   timestamps: true,
@@ -12,7 +12,7 @@ export class Product {
     trim: true,
     blank: false,
   })
-  sku: string;
+  sku: string
 
   @Prop({
     required: true,
@@ -21,26 +21,26 @@ export class Product {
     trim: true,
     blank: false,
   })
-  name: string;
+  name: string
 
   @Prop({
     minlength: 4,
     maxlength: 500,
     trim: true,
   })
-  description: string;
+  description: string
 
   @Prop({
     required: true,
     min: 0,
   })
-  price: number;
+  price: number
 
   @Prop({
     required: true,
     min: 0,
   })
-  weight: number;
+  weight: number
 
   @Prop({
     required: true,
@@ -50,7 +50,7 @@ export class Product {
       message: '{VALUE} no es un valor entero',
     },
   })
-  stock: number;
+  stock: number
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+export const ProductSchema = SchemaFactory.createForClass(Product)
