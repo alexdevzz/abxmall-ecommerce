@@ -24,7 +24,7 @@ interface ErrorResponse {
 export class ErrorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      catchError((error: MongoError | HttpException) => {
+      catchError((error: MongoError | HttpException | Error) => {
         let message = 'An error occurred while processing your request.'
         const ctx = context.switchToHttp()
         const request = ctx.getRequest<Request>()
@@ -49,7 +49,14 @@ export class ErrorInterceptor implements NestInterceptor {
 
         // if already is a HttpException ...
         if (error instanceof HttpException) {
-          return throwError(() => error)
+          const errorResponse: ErrorResponse = {
+            message: error.message ?? message,
+            timestamp,
+            statusCode: error.getStatus(),
+            path,
+            error: error.name ?? 'Undefined error',
+          }
+          return throwError(() => new HttpException(errorResponse, errorResponse.statusCode))
         }
 
         // generic error ...
@@ -60,6 +67,7 @@ export class ErrorInterceptor implements NestInterceptor {
           path,
           error: 'Internal server error',
         }
+
         return throwError(() => new HttpException(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR))
       })
     )
