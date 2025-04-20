@@ -29,7 +29,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
         let message: string = ''
 
         if (request.method === 'GET') {
-          if (!dataResult || (Array.isArray(dataResult) ? dataResult.length : 0) === 0) {
+          if (!dataResult || (Array.isArray(dataResult) && dataResult.length === 0)) {
             message = 'There are no resources available'
           }
         }
