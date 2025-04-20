@@ -1,4 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose'
+import { Category } from 'src/modules/categories/schemas/category.schema'
 
 @Schema({
   timestamps: true,
@@ -51,6 +52,11 @@ export class Product {
     },
   })
   stock: number
+
+  @Prop({
+    type: [{ type: 'ObjectId', ref: 'Category' }],
+  })
+  categories: Category[]
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product)
