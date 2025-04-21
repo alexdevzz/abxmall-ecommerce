@@ -15,11 +15,17 @@ export class CategoriesService {
   }
 
   async findAll() {
-    return this.categoryModel.find()
+    return this.categoryModel.find().populate({
+      path: 'products',
+      select: '-categories',
+    })
   }
 
   async findOneById(id: string) {
-    return this.categoryModel.findById(id)
+    return this.categoryModel.findById(id).populate({
+      path: 'products',
+      select: '-categories',
+    })
   }
 
   async updateOneById(id: string, updateCategoryDto: UpdateCategoryDto) {

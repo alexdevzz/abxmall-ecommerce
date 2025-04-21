@@ -37,4 +37,9 @@ export class ProductsController {
   remove(@Param('id') id: string) {
     return this.productsService.removeOneById(id)
   }
+
+  @Post(':idProduct/categories/:idCategory')
+  addCategory(@Param('idProduct') idProduct: string, @Param('idCategory') idCategory: string) {
+    return this.productsService.addCategoryToProduct(idProduct, idCategory)
+  }
 }
