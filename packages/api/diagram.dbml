@@ -1,0 +1,82 @@
+
+
+Table Products {
+  
+  id_product int [pk]
+  sku varchar
+  name varchar
+  description varchar
+  price double
+  weight double
+  stock int
+  create_at datetime
+  update_at datetime
+}
+
+Table Categories {
+  id_category int pk
+  name varchar
+  description varchar
+  create_at datetime
+  update_at datetime
+}
+
+Table Options {
+  id_option int pk
+  name varchar
+  description varchar
+  create_at datetime
+  update_at datetime
+}
+
+Table Customers {
+  id_customer int pk
+  email varchar
+  name varchar
+  last_name varchar
+  billing_address varchar
+  country varchar
+  phone varchar
+  create_at datetime
+  update_at datetime
+}
+
+Table Orders {
+  id_order int pk
+  fk_customer int [ref: > Customers.id_customer]
+  fk_order_date int [ref: - OrderDates.id_order_date]
+  ammount double 
+  shipping_address varchar
+  order_address varchar
+  order_email varchar
+  order_status varchar
+  sku varchar
+}
+
+Table OderDetails {
+  id_order_detail int pk
+  fk_product int [ref: > Products.id_product]
+  fk_order int [ref: > Orders.id_order]
+  price double
+  
+  quantity int
+}
+
+Table OrderDates {
+  id_order_date int pk
+  creation_date datetime
+  billing_date datetime
+  warehouse_origin_reception_date datetime
+  order_in_container_date datetime
+  sent_date datetime
+  arrived_port_date datetime
+  custom_clearance_date datetime
+  warehouse_destiny_reception_date datetime
+  ready_to_send_date datetime
+  in_delivery_route_date datetime
+  order_delivered_date datetime
+}
+
+Ref: Products.id_product <> Categories.id_category
+
+Ref: Products.id_product <> Options.id_option
