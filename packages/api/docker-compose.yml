@@ -4,3 +4,8 @@ services:
     container_name: nest-ecommerce-mongodb
     ports:
       - "27017:27017"
+    volumes:
+      - abxmall_mongodb_data:/data/db  # Formato correcto: nombre_volumen:ruta_en_contenedor
+
+volumes:
+  abxmall_mongodb_data:  # Declaración del volumen nombrado
