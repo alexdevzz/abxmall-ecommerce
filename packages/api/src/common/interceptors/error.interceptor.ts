@@ -13,7 +13,7 @@ import { MongoError } from 'mongodb'
 import { Request } from 'express'
 
 interface ErrorResponse {
-  message: string
+  message: string | object
   timestamp: string
   statusCode: HttpStatus
   path: string
@@ -50,7 +50,7 @@ export class ErrorInterceptor implements NestInterceptor {
         // if already is a HttpException ...
         if (error instanceof HttpException) {
           const errorResponse: ErrorResponse = {
-            message: error.message ?? message,
+            message: error.getResponse()['message'] ? error.getResponse()['message'] : (error.message ?? message),
             timestamp,
             statusCode: error.getStatus(),
             path,
