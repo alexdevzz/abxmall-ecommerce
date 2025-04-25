@@ -1,5 +1,6 @@
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose'
 import { OrderStatus } from '../enum/order-status.enum'
+import { Customer } from 'src/modules/customers/schemas/customer.schema'
 
 @Schema({
   timestamps: true,
@@ -52,6 +53,11 @@ export class Order {
     trim: true,
   })
   sku: string
+
+  @Prop({
+    type: [{ type: 'ObjectId', ref: 'Customer' }],
+  })
+  customer: Customer
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order)

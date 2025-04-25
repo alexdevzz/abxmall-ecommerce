@@ -1,4 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose'
+import { Order } from 'src/modules/orders/schema/orders.schema'
 
 @Schema({
   timestamps: true,
@@ -53,6 +54,11 @@ export class Customer {
     NaN: false,
   })
   phone: string
+
+  @Prop({
+    type: [{ type: 'ObjectId', ref: 'Order' }],
+  })
+  orders: Order[]
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer)
