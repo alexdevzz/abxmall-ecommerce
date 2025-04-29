@@ -2,14 +2,24 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CustomersService } from './customers.service'
 import { CreateCustomerDto } from './dto/create-customer.dto'
 import { UpdateCustomerDto } from './dto/update-customer.dto'
+import { CreateOrderDto } from '../orders/dto/create-order.dto'
+import { OrdersService } from '../orders/orders.service'
 
 @Controller('customers')
 export class CustomersController {
-  constructor(private readonly customersService: CustomersService) {}
+  constructor(
+    private readonly customersService: CustomersService,
+    private readonly ordersService: OrdersService
+  ) {}
 
   @Post()
   create(@Body() createCustomerDto: CreateCustomerDto) {
     return this.customersService.create(createCustomerDto)
+  }
+
+  @Post(':id/orders')
+  async addOrder(@Param('id') idCustomer: string, @Body() createOrderDto: CreateOrderDto) {
+    return this.ordersService.create(createOrderDto, idCustomer)
   }
 
   @Get()

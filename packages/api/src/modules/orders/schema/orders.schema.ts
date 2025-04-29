@@ -8,6 +8,7 @@ import { Customer } from 'src/modules/customers/schemas/customer.schema'
 export class Order {
   @Prop({
     min: 0,
+    default: 0,
   })
   ammount: number
 
@@ -55,6 +56,7 @@ export class Order {
   sku: string
 
   @Prop({
+    required: true,
     type: [{ type: 'ObjectId', ref: 'Customer' }],
   })
   customer: Customer

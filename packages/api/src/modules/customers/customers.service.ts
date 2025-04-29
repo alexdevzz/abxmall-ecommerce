@@ -15,7 +15,10 @@ export class CustomersService {
   }
 
   async findAll() {
-    return this.customerModel.find()
+    return this.customerModel.find().populate({
+      path: 'orders',
+      select: '-customer',
+    })
   }
 
   async findOneById(id: string) {
