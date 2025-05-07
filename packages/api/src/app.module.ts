@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { ProductsModule } from './modules/products/products.module'
 import { CategoriesModule } from './modules/categories/categories.module'
 import { CustomersModule } from './modules/customers/customers.module'
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { CustomersModule } from './modules/customers/customers.module'
     ProductsModule,
     CategoriesModule,
     CustomersModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],
